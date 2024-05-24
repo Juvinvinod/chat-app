@@ -1,0 +1,29 @@
+.login-card{
+    max-width: 750px;
+    padding: 20px;  
+}
+
+.container{
+    background-image: url('../../../assets/login-background.jpg');
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 63.61px);
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.full-width{
+    display: flex;
+    padding-bottom: 10px;
+}
+
+.title{
+    justify-content: center;
+    padding: 30px;
+}
+
+.login-button{
+    width: 100%;
+}
