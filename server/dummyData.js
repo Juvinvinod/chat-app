@@ -1,9 +1,9 @@
 // Mock users
 const users = [
-    { id: 1, username: 'admin', password: 'admin', role: 'admin' },
-    { id: 2, username: 'user', password: 'user', role: 'user' }
+  { id: 1, email: 'admin@gmail.com', password: 'admin', role: 'admin' },
+  { id: 2, email: 'user@gmail.com', password: 'user', role: 'user' },
 ];
 
 module.exports = {
-    users
-}
+  users,
+};

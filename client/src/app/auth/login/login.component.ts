@@ -33,15 +33,15 @@ export class LoginComponent implements OnInit, OnDestroy {
         .userLogin(this.loginForm.value)
         .subscribe({
           next: res => {
+            console.log(res);
             localStorage.setItem('user', JSON.stringify(res));
             this._router.navigate(['/chat']);
           },
-          error: () => {
-            this.snackBar.open('Error fetching data', 'Dismiss', {
-              duration: 2000,
-            });
-          },
         });
+    } else {
+      this.snackBar.open('Invalid details', 'Dismiss', {
+        duration: 5000,
+      });
     }
   }
 

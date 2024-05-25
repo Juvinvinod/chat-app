@@ -1,11 +1,11 @@
-<app-navbar></app-navbar>
+<app-navbar [logoutButton]="false"></app-navbar>
 <div class="container">
   <mat-card class="login-card">
     <mat-card-header class="title">
       <mat-card-title>LOGIN</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <form class="login-form" [formGroup]="loginForm">
+      <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field class="full-width" appearance="outline">
           <mat-label>Email</mat-label>
           <input
@@ -18,7 +18,7 @@
               loginForm.get('email')?.invalid &&
               (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)
             ">
-            Please provide a name.
+            Please provide a valid email.
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width" appearance="outline">
@@ -33,8 +33,10 @@
             Please provide password.
           </mat-error>
         </mat-form-field>
+        <button mat-flat-button color="accent" class="login-button">
+          Login
+        </button>
       </form>
-      <button mat-flat-button color="accent" class="login-button">Login</button>
     </mat-card-content>
   </mat-card>
 </div>

@@ -1,4 +1,10 @@
 <mat-toolbar color="primary" class="navbar">
   <div>Chat-App</div>
-  <div></div>
+  <ng-container *ngIf="logoutButton">
+    <div>
+      <button mat-icon-button (click)="logOut()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </ng-container>
 </mat-toolbar>

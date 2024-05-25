@@ -3,16 +3,17 @@ const dummyData = require('../dummyData');
 
 const login = (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     const user = dummyData.users.find(
-      (u) => u.username === username && u.password === password,
+      (u) => u.email === email && u.password === password,
     );
 
     if (user) {
+      console.log(user);
       const token = tokenGenerator(user.id);
-
-      res.status(200).json({ token, user });
+      res.status(200).json({ token, ...user });
     } else {
+      console.log('user not found');
       res.status(401).json({ message: 'Invalid username or password' });
     }
   } catch (error) {
