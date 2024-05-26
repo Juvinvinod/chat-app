@@ -13,6 +13,6 @@ export class NavbarComponent {
 
   logOut(): void {
     localStorage.removeItem('user');
-    this._router.navigate(['../']);
+    this._router.navigate(['/login']);
   }
 }

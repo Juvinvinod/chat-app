@@ -8,7 +8,9 @@
     "dev": "nodemon start"
   },
   "eslintConfig": {
-    "extends": ["wesbos"]
+    "extends": [
+      "wesbos"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -19,6 +21,7 @@
     "eslint-config-wesbos": "^4.0.1",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "socket.io": "^4.7.5"
   }
 }

@@ -1,2 +1,74 @@
 <app-navbar [logoutButton]="true"></app-navbar>
-<p>dashboard works!</p>
+<div class="container">
+  <div class="chat-list mat-elevation-z5">
+    <mat-selection-list
+      [multiple]="false"
+      [hideSingleSelectionIndicator]="true"
+      (selectionChange)="joinRoom($event)">
+      <ng-container *ngFor="let user of userList">
+        <mat-list-option [value]="user">
+          <img
+            matListItemAvatar
+            src="assets/profile-pic.png"
+            alt="sample-pic" />
+          <p mat-line class="chat-title">
+            <span class="chat-name">{{ user.email }}</span>
+          </p>
+        </mat-list-option>
+        <mat-divider></mat-divider>
+      </ng-container>
+    </mat-selection-list>
+  </div>
+  <div class="messages mat-elevation-z5">
+    <div class="message-header" *ngIf="recieverName; else noMessages">
+      <img matListItemAvatar src="assets/profile-pic.png" alt="sample-pic" />
+      <h2>{{ recieverName }}</h2>
+    </div>
+    <ng-template #noMessages>
+      <div class="messages-header"><h2>Messages</h2></div>
+    </ng-template>
+    <mat-divider></mat-divider>
+    <div class="chat-area">
+      <ng-container *ngIf="messages">
+        <ng-container *ngFor="let msg of messages">
+          <div
+            class="chat-bubble-container"
+            [ngClass]="{ sender: senderId === msg.senderId }">
+            <div class="chat-bubble">
+              <strong>User {{ msg.senderId }}:</strong> {{ msg.message }}
+            </div>
+          </div>
+        </ng-container>
+        <div #endOfChat style="visibility: hidden">hi</div>
+      </ng-container>
+    </div>
+    <div class="input-area">
+      <mat-form-field appearance="outline">
+        <input
+          [formControl]="messageControl"
+          matInput
+          placeholder="Enter your message..."
+          (keydown.enter)="sendMessage()" />
+        <button mat-icon-button matSuffix (click)="sendMessage()">
+          <mat-icon> send </mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+
+<!-- {{ senderId }}
+<mat-list role="list" *ngFor="let user of userList">
+  <mat-list-item role="listitem" (click)="joinRoom(user)">{{
+    user.email
+  }}</mat-list-item>
+</mat-list>
+
+<div>
+  <input [(ngModel)]="message" placeholder="Enter your message" />
+  <button (click)="sendMessage()">Send</button>
+</div>
+
+<div *ngFor="let msg of messages">
+  <strong>User {{ msg.senderId }}:</strong> {{ msg.message }}
+</div> -->

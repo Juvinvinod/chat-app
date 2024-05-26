@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           next: res => {
             console.log(res);
             localStorage.setItem('user', JSON.stringify(res));
-            this._router.navigate(['/chat']);
+            this._router.navigate(['../']);
           },
         });
     } else {

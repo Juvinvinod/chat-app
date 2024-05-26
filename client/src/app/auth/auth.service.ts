@@ -33,4 +33,26 @@ export class AuthService {
     const token = userObject?.token;
     return token;
   }
+
+  adminLoggedIn() {
+    const userDoc = localStorage.getItem('user');
+    if (userDoc) {
+      const userObject = JSON.parse(userDoc);
+      if (userObject.token && userObject.role === 'admin') {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  loggedIn() {
+    const userDoc = localStorage.getItem('user');
+    if (userDoc) {
+      const userObject = JSON.parse(userDoc);
+      if (userObject.token && userObject.role) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
