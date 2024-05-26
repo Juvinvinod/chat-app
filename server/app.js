@@ -16,42 +16,55 @@ const io = new Server(httpServer, {
 
 // io.on('connection', (socket) => {
 //   console.log('a user connected');
+
+//   let currentRoom = null;
+
 //   socket.on('setup', async (senderId, receiverId) => {
-//     console.log(senderId, receiverId);
-//     const room = `private_${Math.min(senderId, receiverId)}_${Math.max(senderId, receiverId)}`;
-//     await socket.join(room);
-//     console.log(room);
-//     console.log('joined room');
+//     if (currentRoom) {
+//       socket.leave(currentRoom);
+//     }
+
+//     currentRoom = `private_${Math.min(senderId, receiverId)}_${Math.max(senderId, receiverId)}`;
+//     await socket.join(currentRoom);
+//     console.log(`User ${senderId} joined room ${currentRoom}`);
+
+//     // Remove any previous 'chat' listener
+//     socket.removeAllListeners('chat');
+
+//     // Listen for chat messages
 //     socket.on('chat', (data) => {
-//       console.log(data.room);
-//       io.to(data.room).emit('chat', data);
+//       io.to(currentRoom).emit('chat', data);
 //     });
+
 //     socket.on('disconnect', () => {
 //       console.log('user disconnected');
 //     });
 //   });
 // });
 
+const messages = {}; // In-memory store for messages
+
 io.on('connection', (socket) => {
   console.log('a user connected');
 
-  let currentRoom = null;
-
   socket.on('setup', async (senderId, receiverId) => {
-    if (currentRoom) {
-      socket.leave(currentRoom);
+    const room = `private_${Math.min(senderId, receiverId)}_${Math.max(senderId, receiverId)}`;
+    await socket.join(room);
+    console.log(`User ${senderId} joined room ${room}`);
+
+    // Fetch previously sent messages for the room
+    if (messages[room]) {
+      socket.emit('previousMessages', messages[room]);
     }
-
-    currentRoom = `private_${Math.min(senderId, receiverId)}_${Math.max(senderId, receiverId)}`;
-    await socket.join(currentRoom);
-    console.log(`User ${senderId} joined room ${currentRoom}`);
-
-    // Remove any previous 'chat' listener
     socket.removeAllListeners('chat');
-
-    // Listen for chat messages
     socket.on('chat', (data) => {
-      io.to(currentRoom).emit('chat', data);
+      const messageRoom = `private_${Math.min(data.senderId, data.receiverId)}_${Math.max(data.senderId, data.receiverId)}`;
+      if (!messages[messageRoom]) {
+        messages[messageRoom] = [];
+      }
+      messages[messageRoom].push(data);
+
+      io.to(messageRoom).emit('chat', data);
     });
 
     socket.on('disconnect', () => {

@@ -2,3 +2,19 @@
     display: flex;
     justify-content: space-between;
 }
+
+.nav-button{
+    display: flex;
+    align-items: center;
+}
+
+.nav-button > img {
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 16px;
+    height: 35px;
+}
+
+.name{
+    padding-right: 10px;
+}

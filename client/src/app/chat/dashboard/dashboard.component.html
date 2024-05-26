@@ -1,4 +1,4 @@
-<app-navbar [logoutButton]="true"></app-navbar>
+<app-navbar [logoutButton]="true" [name]="userName"></app-navbar>
 <div class="container">
   <div class="chat-list mat-elevation-z5">
     <mat-selection-list
@@ -35,7 +35,7 @@
             class="chat-bubble-container"
             [ngClass]="{ sender: senderId === msg.senderId }">
             <div class="chat-bubble">
-              <strong>User {{ msg.senderId }}:</strong> {{ msg.message }}
+              {{ msg.message }}
             </div>
           </div>
         </ng-container>
@@ -56,19 +56,3 @@
     </div>
   </div>
 </div>
-
-<!-- {{ senderId }}
-<mat-list role="list" *ngFor="let user of userList">
-  <mat-list-item role="listitem" (click)="joinRoom(user)">{{
-    user.email
-  }}</mat-list-item>
-</mat-list>
-
-<div>
-  <input [(ngModel)]="message" placeholder="Enter your message" />
-  <button (click)="sendMessage()">Send</button>
-</div>
-
-<div *ngFor="let msg of messages">
-  <strong>User {{ msg.senderId }}:</strong> {{ msg.message }}
-</div> -->

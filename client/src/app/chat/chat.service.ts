@@ -39,6 +39,17 @@ export class ChatService {
     }
   }
 
+  getPreviousMessages(): Observable<
+    {
+      message: string;
+      senderId: number;
+      receiverId: number;
+      room: string;
+    }[]
+  > {
+    return this.socket.fromEvent('previousMessages');
+  }
+
   getMessages(): Observable<{
     message: string;
     senderId: number;
@@ -66,7 +77,14 @@ export class ChatService {
     return id;
   }
 
+  getUserName() {
+    const user = localStorage.getItem('user');
+    const userObject = user ? JSON.parse(user) : null;
+    const name = userObject?.name;
+    return name;
+  }
+
   getAllUsers() {
-    return this.http.get<ApiResponse>(this.apiURL + '/' + 'users');
+    return this.http.get<User[]>(this.apiURL + '/' + 'users');
   }
 }

@@ -21,7 +21,8 @@ const login = (req, res) => {
 
 const getUsers = (req, res) => {
   try {
-    res.status(200).json(dummyData);
+    const filteredData = dummyData.users.filter((doc) => doc.role !== 'user');
+    res.status(200).json(filteredData);
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }

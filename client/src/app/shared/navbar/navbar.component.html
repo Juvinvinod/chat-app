@@ -1,7 +1,9 @@
 <mat-toolbar color="primary" class="navbar">
   <div>Chat-App</div>
   <ng-container *ngIf="logoutButton">
-    <div>
+    <div class="nav-button">
+      <img src="assets/profile-pic.png" alt="profile-pic" />
+      <div class="name">{{ name }}</div>
       <button mat-icon-button (click)="logOut()">
         <mat-icon>logout</mat-icon>
       </button>

@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent {
   @Input() logoutButton!: boolean;
+  @Input() name!: string;
 
   constructor(private _router: Router) {}
 

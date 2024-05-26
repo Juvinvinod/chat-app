@@ -19,23 +19,26 @@ import { FormControl } from '@angular/forms';
 export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('endOfChat') endOfChat!: ElementRef;
   messageControl = new FormControl('');
+  userName!: string;
   senderId!: number;
   recieverName!: string;
   receiverId!: number;
   userList!: User[];
   messages: { senderId: number; message: string }[] = [];
   private messagesSubscription!: Subscription;
+  private previousMessagesSubscription!: Subscription;
 
   constructor(private socketService: ChatService) {}
 
   ngOnInit(): void {
+    this.senderId = this.socketService.getUserId();
+    this.userName = this.socketService.getUserName();
     this.socketService.getAllUsers().subscribe({
       next: res => {
-        console.log(res.users);
-        this.userList = res.users;
+        this.userList = res.filter(user => user.id !== this.senderId);
       },
     });
-    this.senderId = this.socketService.getUserId();
+
     this.messagesSubscription = this.socketService
       .getMessages()
       .subscribe(
@@ -50,6 +53,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.scrollToBottom();
         }
       );
+    this.findPreviousChat();
+  }
+
+  findPreviousChat() {
+    this.previousMessagesSubscription = this.socketService
+      .getPreviousMessages()
+      .subscribe(
+        (
+          previousMessages: {
+            message: string;
+            senderId: number;
+            receiverId: number;
+            room: string;
+          }[]
+        ) => {
+          console.log(previousMessages);
+          this.messages = previousMessages;
+          this.scrollToBottom();
+        }
+      );
   }
 
   ngOnDestroy(): void {
@@ -57,12 +80,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.messagesSubscription) {
       this.messagesSubscription.unsubscribe();
     }
+    if (this.previousMessagesSubscription) {
+      this.previousMessagesSubscription.unsubscribe();
+    }
   }
 
   joinRoom(event: MatSelectionListChange): void {
     this.receiverId = event?.options[0].value.id;
     this.recieverName = event?.options[0].value.email;
     this.socketService.joinRoom(this.senderId, this.receiverId);
+    this.messages = [];
+    this.findPreviousChat();
   }
 
   sendMessage(): void {
