@@ -24,7 +24,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   recieverName!: string;
   receiverId!: number;
   userList!: User[];
-  messages: { senderId: number; message?: string; image?: string }[] = [];
+  messages: {
+    senderId: number;
+    message?: string;
+    image?: string;
+    id: number;
+  }[] = [];
   private messagesSubscription!: Subscription;
   private previousMessagesSubscription!: Subscription;
   private selectedFile!: File;
@@ -50,7 +55,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           receiverId: number;
           room: string;
         }) => {
-          this.messages.push(data);
+          this.messages.push({ ...data, id: Date.now() + Math.random() });
           this.scrollToBottom();
         }
       );
@@ -69,7 +74,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           }[]
         ) => {
           console.log(previousMessages);
-          this.messages = previousMessages;
+          this.messages = previousMessages.map(msg => ({
+            ...msg,
+            id: Date.now() + Math.random(),
+          }));
           this.scrollToBottom();
         }
       );
@@ -126,5 +134,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.endOfChat.nativeElement.scrollIntoView({ behavior: 'smooth' });
       }
     }, 100);
+  }
+
+  trackByMessage(index: number, message: { id: number }): number {
+    return message.id;
   }
 }

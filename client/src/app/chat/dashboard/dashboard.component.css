@@ -13,11 +13,11 @@
     width: 40%;
     background: #c5cae9;
     border-radius: 16px;
+    padding: 5px;
 }
 
 .messages{
     width: 60%;
-    /* margin: 16px; */
     border-radius: 16px;
     padding: 24px;
     @media (min-width: 768px) and (max-width: 1250px) {

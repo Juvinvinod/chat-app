@@ -30,7 +30,7 @@
     <mat-divider></mat-divider>
     <div class="chat-area">
       <ng-container *ngIf="messages">
-        <ng-container *ngFor="let msg of messages">
+        <ng-container *ngFor="let msg of messages; trackBy: trackByMessage">
           <div
             class="chat-bubble-container"
             [ngClass]="{ sender: senderId === msg.senderId }">
