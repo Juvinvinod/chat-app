@@ -1,20 +1,35 @@
 .container{
    display: flex;
-   height: calc(100vh - 70px);
+   height: calc(100vh - 97px);
+   max-width: 100%;
+   padding: 16px;
+   gap: 30px;
+   @media (max-width: 1250px) {
+    gap: 15px;
+   }
 }
 
 .chat-list{
     width: 40%;
-    margin: 16px;
     background: #c5cae9;
     border-radius: 16px;
 }
 
 .messages{
     width: 60%;
-    margin: 16px;
+    /* margin: 16px; */
     border-radius: 16px;
     padding: 24px;
+    @media (min-width: 768px) and (max-width: 1250px) {
+        padding: 10px;
+        width: 55%;
+    }
+
+    @media (max-width: 767px) {
+        width: 50%;
+        padding: 10px;
+    }
+
     background: rgba(0, 0, 0, 0.05);
 }
 
@@ -86,4 +101,12 @@
     margin-bottom: 16px;
     border-radius: 8px;
     width: fit-content;
+    max-width: 75%;
+    word-wrap: break-word;
+}
+
+.chat-bubble > img {
+    object-fit: cover;
+    max-width:75%;
+    
 }

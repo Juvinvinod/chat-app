@@ -57,6 +57,7 @@ io.on('connection', (socket) => {
       socket.emit('previousMessages', messages[room]);
     }
     socket.removeAllListeners('chat');
+    socket.removeAllListeners('image');
     socket.on('chat', (data) => {
       const messageRoom = `private_${Math.min(data.senderId, data.receiverId)}_${Math.max(data.senderId, data.receiverId)}`;
       if (!messages[messageRoom]) {
@@ -65,6 +66,15 @@ io.on('connection', (socket) => {
       messages[messageRoom].push(data);
 
       io.to(messageRoom).emit('chat', data);
+    });
+
+    socket.on('image', (data) => {
+      const { image, senderId, receiverId, room } = data;
+      if (!messages[room]) {
+        messages[room] = [];
+      }
+      messages[room].push({ image, senderId, receiverId, room });
+      io.to(room).emit('chat', { image, senderId, receiverId, room });
     });
 
     socket.on('disconnect', () => {

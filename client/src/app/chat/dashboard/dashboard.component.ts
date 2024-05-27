@@ -24,9 +24,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   recieverName!: string;
   receiverId!: number;
   userList!: User[];
-  messages: { senderId: number; message: string }[] = [];
+  messages: { senderId: number; message?: string; image?: string }[] = [];
   private messagesSubscription!: Subscription;
   private previousMessagesSubscription!: Subscription;
+  private selectedFile!: File;
 
   constructor(private socketService: ChatService) {}
 
@@ -43,17 +44,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .getMessages()
       .subscribe(
         (data: {
-          message: string;
+          message?: string;
+          image?: string;
           senderId: number;
           receiverId: number;
           room: string;
         }) => {
-          console.log(data);
           this.messages.push(data);
           this.scrollToBottom();
         }
       );
-    this.findPreviousChat();
   }
 
   findPreviousChat() {
@@ -87,7 +87,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   joinRoom(event: MatSelectionListChange): void {
     this.receiverId = event?.options[0].value.id;
-    this.recieverName = event?.options[0].value.email;
+    this.recieverName = event?.options[0].value.name;
     this.socketService.joinRoom(this.senderId, this.receiverId);
     this.messages = [];
     this.findPreviousChat();
@@ -98,6 +98,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (message && this.senderId) {
       this.socketService.sendMessage(message, this.senderId, this.receiverId);
       this.messageControl.setValue('');
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.selectedFile = input.files[0];
+      this.sendImage();
+    }
+  }
+
+  sendImage(): void {
+    if (this.selectedFile && this.senderId) {
+      this.socketService.sendImage(
+        this.selectedFile,
+        this.senderId,
+        this.receiverId
+      );
     }
   }
 

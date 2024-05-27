@@ -66,6 +66,20 @@ export class ChatService {
       .pipe(filter(message => message.room === this.currentRoom));
   }
 
+  sendImage(image: File, senderId: number, receiverId: number): void {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const imageData = reader.result as string;
+      this.socket.emit('image', {
+        image: imageData,
+        senderId,
+        receiverId,
+        room: this.currentRoom,
+      });
+    };
+    reader.readAsDataURL(image);
+  }
+
   disconnect() {
     this.socket.disconnect();
   }

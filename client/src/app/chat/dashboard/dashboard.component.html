@@ -12,7 +12,7 @@
             src="assets/profile-pic.png"
             alt="sample-pic" />
           <p mat-line class="chat-title">
-            <span class="chat-name">{{ user.email }}</span>
+            <span class="chat-name">{{ user.name }}</span>
           </p>
         </mat-list-option>
         <mat-divider></mat-divider>
@@ -34,14 +34,23 @@
           <div
             class="chat-bubble-container"
             [ngClass]="{ sender: senderId === msg.senderId }">
-            <div class="chat-bubble">
+            <div class="chat-bubble" *ngIf="msg.message">
               {{ msg.message }}
+            </div>
+            <div class="chat-bubble" *ngIf="msg.image">
+              <img [src]="msg.image" alt="Image" />
             </div>
           </div>
         </ng-container>
         <div #endOfChat style="visibility: hidden">hi</div>
       </ng-container>
     </div>
+    <!-- File input for images -->
+    <input
+      type="file"
+      (change)="onFileSelected($event)"
+      #fileInput
+      style="display: none" />
     <div class="input-area">
       <mat-form-field appearance="outline">
         <input
@@ -49,6 +58,9 @@
           matInput
           placeholder="Enter your message..."
           (keydown.enter)="sendMessage()" />
+        <button mat-icon-button matSuffix (click)="fileInput.click()">
+          <mat-icon> attachment </mat-icon>
+        </button>
         <button mat-icon-button matSuffix (click)="sendMessage()">
           <mat-icon> send </mat-icon>
         </button>
