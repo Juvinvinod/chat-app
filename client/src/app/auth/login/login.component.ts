@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar
   ) {}
 
+  //initialize form on loading component
   ngOnInit(): void {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -27,6 +28,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
+  //if the form is valid make the API call and save the token in local storage.
   onSubmit() {
     if (this.loginForm.valid) {
       this.loginSubscription = this.authService
@@ -45,6 +47,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
+  //unsubscribe on changing component
   ngOnDestroy(): void {
     if (this.loginSubscription) {
       this.loginSubscription.unsubscribe();

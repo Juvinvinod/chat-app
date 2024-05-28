@@ -20,6 +20,7 @@ export class ChatService {
     private http: HttpClient
   ) {}
 
+  //get channelId from server and join room using that ID
   joinRoom(senderId: number, receiverId: number, recieverType: string): void {
     let queryParams = new HttpParams();
     queryParams = queryParams.append('sender', String(senderId));
@@ -39,6 +40,7 @@ export class ChatService {
       });
   }
 
+  //if connected to a room send message to that room
   sendMessage(message: string, senderId: number, receiverId: number): void {
     if (this.currentRoom) {
       this.socket.emit('chat', {
@@ -50,6 +52,7 @@ export class ChatService {
     }
   }
 
+  //get previous messages belonging to the room
   getPreviousMessages(): Observable<
     {
       message: string;
@@ -61,6 +64,7 @@ export class ChatService {
     return this.socket.fromEvent('previousMessages');
   }
 
+  //get messages from room and filter data for present room
   getMessages(): Observable<{
     message: string;
     senderId: number;
@@ -77,6 +81,7 @@ export class ChatService {
       .pipe(filter(message => message.room === this.currentRoom));
   }
 
+  //send image file through websocket
   sendImage(image: File, senderId: number, receiverId: number): void {
     const reader = new FileReader();
     reader.onload = () => {
@@ -91,6 +96,7 @@ export class ChatService {
     reader.readAsDataURL(image);
   }
 
+  //disconnect socket from server
   disconnect() {
     this.socket.disconnect();
   }
