@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   senderId!: number;
   recieverName!: string;
   receiverId!: number;
+  recieverType!: string;
   userList!: User[];
   messages: {
     senderId: number;
@@ -44,7 +45,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.userList = res.filter(user => user.id !== this.senderId);
       },
     });
+    this.updateMessages();
+  }
 
+  updateMessages() {
     this.messagesSubscription = this.socketService
       .getMessages()
       .subscribe(
@@ -83,20 +87,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
       );
   }
 
-  ngOnDestroy(): void {
-    this.socketService.disconnect();
-    if (this.messagesSubscription) {
-      this.messagesSubscription.unsubscribe();
-    }
-    if (this.previousMessagesSubscription) {
-      this.previousMessagesSubscription.unsubscribe();
-    }
-  }
-
   joinRoom(event: MatSelectionListChange): void {
     this.receiverId = event?.options[0].value.id;
     this.recieverName = event?.options[0].value.name;
-    this.socketService.joinRoom(this.senderId, this.receiverId);
+    this.recieverType = event?.options[0].value.type;
+    this.socketService.joinRoom(
+      this.senderId,
+      this.receiverId,
+      this.recieverType
+    );
     this.messages = [];
     this.findPreviousChat();
   }
@@ -130,7 +129,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   scrollToBottom() {
     setTimeout(() => {
       if (this.endOfChat) {
-        console.log('hi');
         this.endOfChat.nativeElement.scrollIntoView({ behavior: 'smooth' });
       }
     }, 100);
@@ -138,5 +136,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   trackByMessage(index: number, message: { id: number }): number {
     return message.id;
+  }
+
+  ngOnDestroy(): void {
+    this.socketService.disconnect();
+    if (this.messagesSubscription) {
+      this.messagesSubscription.unsubscribe();
+    }
+    if (this.previousMessagesSubscription) {
+      this.previousMessagesSubscription.unsubscribe();
+    }
   }
 }

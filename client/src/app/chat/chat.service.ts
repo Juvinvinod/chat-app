@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { Observable, filter } from 'rxjs';
@@ -20,12 +20,23 @@ export class ChatService {
     private http: HttpClient
   ) {}
 
-  joinRoom(senderId: number, receiverId: number): void {
-    const room = `private_${Math.min(senderId, receiverId)}_${Math.max(senderId, receiverId)}`;
-    if (this.currentRoom !== room) {
-      this.currentRoom = room;
-      this.socket.emit('setup', senderId, receiverId);
-    }
+  joinRoom(senderId: number, receiverId: number, recieverType: string): void {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append('sender', String(senderId));
+    queryParams = queryParams.append('reciever', String(receiverId));
+    queryParams = queryParams.append('type', recieverType);
+    this.http
+      .get<string>(this.apiURL + '/chat', {
+        params: queryParams,
+      })
+      .subscribe({
+        next: res => {
+          if (this.currentRoom !== res) {
+            this.currentRoom = res;
+            this.socket.emit('setup', res);
+          }
+        },
+      });
   }
 
   sendMessage(message: string, senderId: number, receiverId: number): void {

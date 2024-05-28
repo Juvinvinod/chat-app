@@ -6,6 +6,7 @@ const users = [
     name: 'Admin',
     password: 'admin',
     role: 'admin',
+    type: 'user',
   },
   {
     id: 2,
@@ -13,6 +14,7 @@ const users = [
     name: 'User',
     password: 'user',
     role: 'user',
+    type: 'user',
   },
   {
     id: 3,
@@ -20,6 +22,7 @@ const users = [
     name: 'Juvin',
     password: 'user',
     role: 'admin',
+    type: 'user',
   },
   {
     id: 4,
@@ -27,6 +30,15 @@ const users = [
     name: 'Arun',
     password: 'user',
     role: 'admin',
+    type: 'user',
+  },
+  {
+    id: 5,
+    email: '',
+    name: 'Group',
+    password: '',
+    role: '',
+    type: 'group',
   },
 ];
 
